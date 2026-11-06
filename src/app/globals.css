@@ -1,0 +1,255 @@
+@import "tailwindcss";
+
+/*
+ * UpHeld design system: minimalist, monochrome, architectural.
+ * Light is the default surface (#fff / #fafafa / #ebebeb); dark is pure black with #171717.
+ * Blue (#0070f3) is functional only: focus rings and live indicators.
+ * Status hues (down / degraded) appear only inside telemetry data.
+ * Any element can scope a theme with data-theme="dark" | "light" (e.g. the black hero).
+ */
+:root,
+[data-theme="light"] {
+  --canvas: #ffffff;
+  --subtle: #fafafa;
+  --panel: #ffffff;
+  --raised: #fafafa;
+  --hover: #f2f2f2;
+  --line: #ebebeb;
+  --line-strong: #d6d6d6;
+  --bone: #ffffff;
+  --bone-line: #ebebeb;
+  --ink: #171717;
+  --ink-rgb: 23 23 23;
+  --ink-inverse: #ffffff;
+  --slate: #666666; /* secondary text, 5.7:1 on white */
+  --dim: #737373; /* technical labels, 4.7:1 on white */
+  --faint: #a8a8a8; /* decorative detail only (never body text) */
+  --ink-dark: #171717;
+  --accent: #0070f3;
+  --accent-rgb: 0 112 243;
+  --accent-ink: #0068d6;
+  --down: #da2f35;
+  --warn: #a35200;
+  --elev-card: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 2px 2px 0 rgba(0, 0, 0, 0.04);
+  --elev-raised: 0 0 0 1px rgba(0, 0, 0, 0.08), 0 1px 1px 0 rgba(0, 0, 0, 0.02), 0 4px 8px 0 rgba(0, 0, 0, 0.04);
+  --ease: cubic-bezier(0.39, 0.18, 0.17, 0.99);
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --canvas: #000000;
+  --subtle: #0a0a0a;
+  --panel: #0a0a0a;
+  --raised: #171717;
+  --hover: #1f1f1f;
+  --line: #1f1f1f;
+  --line-strong: #333333;
+  --bone: #f4f3ef;
+  --bone-line: rgba(0, 0, 0, 0.08);
+  --ink: #ededed;
+  --ink-rgb: 237 237 237;
+  --ink-inverse: #0a0a0a;
+  --slate: #a1a1a1;
+  --dim: #8f8f8f;
+  --faint: #5c5c5c;
+  --ink-dark: #0a0a0a;
+  --accent: #0070f3;
+  --accent-rgb: 0 112 243;
+  --accent-ink: #52a8ff;
+  --down: #ff6166;
+  --warn: #ffb224;
+  --elev-card: 0 0 0 1px rgba(255, 255, 255, 0.1);
+  --elev-raised: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 8px 24px -8px rgba(0, 0, 0, 0.6);
+  color-scheme: dark;
+}
+
+/* scoped theme islands recompute inherited text color */
+[data-theme] {
+  color: var(--ink);
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-subtle: var(--subtle);
+  --color-faint: var(--faint);
+  --color-panel: var(--panel);
+  --color-raised: var(--raised);
+  --color-hover: var(--hover);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-bone: var(--bone);
+  --color-bone-line: var(--bone-line);
+  --color-ink: var(--ink);
+  --color-ink-inverse: var(--ink-inverse);
+  --color-slate: var(--slate);
+  --color-dim: var(--dim);
+  --color-ink-dark: var(--ink-dark);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-down: var(--down);
+  --color-warn: var(--warn);
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, monospace;
+  --font-pixel: var(--font-geist-mono), ui-monospace, monospace;
+
+  --ease-mech: cubic-bezier(0.39, 0.18, 0.17, 0.99);
+  /* every Tailwind transition-* defaults to a smooth in-out curve */
+  --default-transition-duration: 300ms;
+  --default-transition-timing-function: cubic-bezier(0.39, 0.18, 0.17, 0.99);
+  --shadow-card: var(--elev-card);
+  --shadow-raised: var(--elev-raised);
+  --radius-card: 8px;
+}
+
+html {
+  background: var(--canvas);
+}
+
+/* smooth theme cross-fade (class is added for ~600ms while switching) */
+html.theme-switching,
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition: background-color 600ms var(--ease), color 600ms var(--ease), border-color 600ms var(--ease), fill 600ms var(--ease), stroke 600ms var(--ease), box-shadow 600ms var(--ease) !important;
+}
+
+body {
+  /* transparent so the fixed ambient field (z -10) shows; html paints the canvas */
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-sans);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  letter-spacing: -0.045em;
+  font-weight: 600;
+}
+
+.tabular, .font-mono { font-variant-numeric: tabular-nums; }
+
+/* technical label, mono, sentence case, dim */
+.label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 1.3;
+  letter-spacing: 0;
+  color: var(--dim);
+}
+
+/* exposed hairline grid: children separated by shared 1px rules */
+.hairgrid {
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+}
+.hairgrid > * { background: var(--panel); }
+.hairgrid-panel > * { background: var(--panel); }
+.hairgrid-bone { background: var(--bone-line); border-color: var(--bone-line); }
+.hairgrid-bone > * { background: var(--bone); }
+
+::selection { background: var(--ink); color: var(--ink-inverse); }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.scroll-thin { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--ink) 16%, transparent) transparent; }
+.scroll-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+.scroll-thin::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--ink) 16%, transparent); border-radius: 3px; }
+
+/* range input, hairline track, square thumb */
+input[type="range"].range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 2px;
+  background: linear-gradient(to right, var(--range-fill, var(--ink)) 0%, var(--range-fill, var(--ink)) var(--range-pct, 0%), color-mix(in srgb, var(--ink) 14%, transparent) var(--range-pct, 0%));
+}
+input[type="range"].range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px; border-radius: 2px;
+  background: var(--canvas); border: 1.5px solid var(--range-fill, var(--ink)); cursor: grab;
+}
+input[type="range"].range::-moz-range-thumb {
+  width: 12px; height: 12px; border-radius: 2px;
+  background: var(--canvas); border: 1.5px solid var(--range-fill, var(--ink)); cursor: grab;
+}
+
+/* cursor-tracked border illumination (set --mx/--my from JS) */
+.spotlight { position: relative; isolation: isolate; }
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(260px circle at var(--mx, -999px) var(--my, -999px), color-mix(in srgb, var(--ink) 34%, transparent), transparent 70%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 450ms var(--ease);
+  pointer-events: none;
+  z-index: 1;
+}
+.spotlight:hover::before { opacity: 1; }
+
+@keyframes caret { 0%, 100% { opacity: 1; } 50% { opacity: 0.15; } }
+.caret::after { content: "▍"; margin-left: 1px; animation: caret 1.1s var(--ease) infinite; color: var(--accent-ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* spotlight variant for bone/light surfaces */
+.spotlight-ink::before {
+  background: radial-gradient(240px circle at var(--mx, -999px) var(--my, -999px), rgba(0,0,0,0.45), transparent 70%);
+}
+
+/* 3D flip card */
+.flip-scene { perspective: 1400px; }
+.flip-face { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
+
+/* range on bone */
+[data-theme="light"] input[type="range"].range-ink,
+input[type="range"].range-ink {
+  background: linear-gradient(to right, #0a0a0a 0%, #0a0a0a var(--range-pct, 0%), rgba(0,0,0,0.12) var(--range-pct, 0%));
+}
+input[type="range"].range-ink::-webkit-slider-thumb { background: #f4f3ef; border-color: #0a0a0a; }
+input[type="range"].range-ink::-moz-range-thumb { background: #f4f3ef; border-color: #0a0a0a; }
+
+/* Vercel-style registration crosshairs at the corners of a frame */
+.crosshairs { position: relative; }
+.crosshairs > .xh {
+  position: absolute;
+  width: 21px;
+  height: 21px;
+  pointer-events: none;
+  color: var(--faint);
+}
+.crosshairs > .xh::before,
+.crosshairs > .xh::after {
+  content: "";
+  position: absolute;
+  background: currentColor;
+}
+.crosshairs > .xh::before { left: 10px; top: 0; width: 1px; height: 21px; }
+.crosshairs > .xh::after { top: 10px; left: 0; height: 1px; width: 21px; }
+.crosshairs > .xh.tl { top: -11px; left: -11px; }
+.crosshairs > .xh.tr { top: -11px; right: -11px; }
+.crosshairs > .xh.bl { bottom: -11px; left: -11px; }
+.crosshairs > .xh.br { bottom: -11px; right: -11px; }

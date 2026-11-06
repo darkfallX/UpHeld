@@ -1,0 +1,23 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "MockUSDC.sol": {
+      "content": "// SPDX-License-Identifier: MIT\npragma solidity ^0.8.20;\n\n/// @title MockUSDC: 6-decimal testnet USDC for UpHeld on Base Sepolia (chainId 84532)\n/// @notice Anyone can mint up to 1,000 USDC per faucet call so judges are never blocked\n///         by Circle's rate-limited faucet. Testnet only. Never deploy to mainnet.\ncontract MockUSDC {\n    string public constant name = \"USD Coin (UpHeld Base Testnet)\";\n    string public constant symbol = \"USDC\";\n    uint8 public constant decimals = 6;\n    uint256 public constant FAUCET_MAX = 1_000 * 1e6; // 1,000 USDC per call\n    uint256 public totalSupply;\n\n    mapping(address => uint256) public balanceOf;\n    mapping(address => mapping(address => uint256)) public allowance;\n\n    event Transfer(address indexed from, address indexed to, uint256 value);\n    event Approval(address indexed owner, address indexed spender, uint256 value);\n\n    function faucet(address to, uint256 amount) external {\n        require(amount <= FAUCET_MAX, \"Faucet max is 1,000 USDC per call\");\n        totalSupply += amount;\n        balanceOf[to] += amount;\n        emit Transfer(address(0), to, amount);\n    }\n\n    function approve(address spender, uint256 amount) external returns (bool) {\n        allowance[msg.sender][spender] = amount;\n        emit Approval(msg.sender, spender, amount);\n        return true;\n    }\n\n    function transfer(address to, uint256 amount) external returns (bool) {\n        require(balanceOf[msg.sender] >= amount, \"Insufficient USDC\");\n        balanceOf[msg.sender] -= amount;\n        balanceOf[to] += amount;\n        emit Transfer(msg.sender, to, amount);\n        return true;\n    }\n\n    function transferFrom(address from, address to, uint256 amount) external returns (bool) {\n        require(balanceOf[from] >= amount, \"Insufficient USDC\");\n        require(allowance[from][msg.sender] >= amount, \"Insufficient allowance\");\n        allowance[from][msg.sender] -= amount;\n        balanceOf[from] -= amount;\n        balanceOf[to] += amount;\n        emit Transfer(from, to, amount);\n        return true;\n    }\n}\n"
+    }
+  },
+  "settings": {
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "evmVersion": "paris",
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode.object"
+        ]
+      }
+    }
+  }
+}
