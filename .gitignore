@@ -46,3 +46,14 @@ next-env.d.ts
 /VOICEOVER.md
 /backups/
 /.claude/
+
+# demo video and voiceover recordings
+*.mp4
+*.mp3
+
+# internal agent and planning docs (kept locally, not published)
+AGENTS.md
+PRODUCT.md
+SKILLS.md
+MOTION.md
+BASE_AND_MCP_GUIDE.md
