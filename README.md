@@ -4,7 +4,7 @@ UpHeld is a subscription platform on Base where every plan comes with an uptime 
 
 Built for Vibestarter Vibeathon 02 (theme: Night shift). The app runs on testnet only: Base Sepolia, chain ID 84532. No real money is used.
 
-Live app: <add your Vercel URL>
+Live app: https://upheld-lovat.vercel.app/
 
 > **Two modes.** The **Judge Sandbox** is the default and needs no wallet. It is a prefunded test wallet inside the app that runs an in-browser copy of the contract with the same integer math. **Live mode** on `/contracts` sends real transactions to Base Sepolia from your own browser wallet. Anything labelled "sandbox" runs in your browser and is not on a blockchain.
 
